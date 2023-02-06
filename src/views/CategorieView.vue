@@ -1,6 +1,18 @@
 <template>
     <main>
         <div>
+            <!-- Un formulaire pour saisir les valeurs de la catégorie à ajouter -->
+            <form @submit.prevent="ajouteCategorie">
+                <div>
+                    <input id="libelle" v-model="data.formulaireCategorie.libelle" placeholder="Libelle" />
+                </div>
+                <div>
+                    <input id="description" v-model="data.formulaireCategorie.description" placeholder="Description" />
+                </div>
+                <button type="submit">Ajouter</button>
+            </form>
+        </div>
+        <div>
             <table class="styled-table">
                 <caption>Liste des catégories</caption>
                 <tr>
