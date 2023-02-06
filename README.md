@@ -1,4 +1,4 @@
-# comptoirs-frontend
+# comptoirs-frontend fait par JB & Ezechiel
 
 Exemple de frontend sur l'API "comptoirs".
 
