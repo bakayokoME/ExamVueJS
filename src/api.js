@@ -3,7 +3,7 @@
 //const BACKEND = 'http://localhost:8989';
 // Le backend est également déployé sur heroku
 // Attention : le chargement initial peut être un peu long...
-const BACKEND = 'https://springajax.herokuapp.com';
+const BACKEND = 'https://webmmi.iut-tlse3.fr/~pecatte/librairies/public/6/livres';
 
 /**
  * Faire un appel AJAX avec l'API fetch
