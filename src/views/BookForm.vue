@@ -1,164 +1,194 @@
-<template>
-    <main>
-        <div>
-            <table class="styled-table">
-                <caption>Liste des Produits</caption>
-                <tr>
-                    <th>Nom</th>
-                    <th>Prix</th>
-                    <th>Stock</th>
-                    <th>Commandés</th>
-                </tr>    
-                <!-- Si le tableau des catégories n'est pas vide -->
-                <tr v-for="produit in data.listeProduits" :key="produit.reference">
-                    <td>{{ produit.nom }}</td>
-                    <td>{{ produit.prixUnitaire }}</td>
-                    <td>{{ produit.unitesEnStock }}</td>
-                    <td>{{ produit.unitesCommandees }}</td>
-                </tr>
-                <tr v-if="data.listeProduits">
-                    
-                    <td>
-                        <button  @click="StartProduits(data.links.first.href)"  type="button" class="btn btn-large btn-block btn-success" style=" margin-left: 50px;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5zm-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5z"/>
-                        </svg>
-                        </button>
-                    </td>
-
-                    <td>
-                    <button @click="StartProduits(data.links.self.href)"   type="button" class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
-                        <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
-                        </svg>
-                    </button>
-                    </td>
-
-                    <td>
-                    <button @click="StartProduits(data.links.next.href)"   type="button" class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
-                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                    </svg>
-                    </button>
-                    </td>
-
-                   <td>
-                        <button  @click="StartProduits(data.links.last.href)"  type="button" class="btn btn-large btn-block btn-success" style="margin-left: auto;margin-right: auto;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-up" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5zm-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5z"/>
-                        </svg>
-                        </button>
-                    </td>
-
-                </tr>
-
-                
-            </table>
-        </div>
-    </main>
-</template>
-
 <script setup>
+import NavBar from './NavBar.vue';
+import { ref } from "vue";
 import { reactive, onMounted } from "vue";
 import { BACKEND, doAjaxRequest } from "../api";
 
-// Pour réinitialiser le formuaire
 
-let data = reactive({
-    // Les données saisies dans le formulaire
-    // formulaireCategorie: { ...categorieVide },
-    // La liste des catégories affichée sous forme de table
-    listeProduits: [],
-    links: {},
-    page: {}
-});
+const titre = ref("");
+const prix = ref("");
+const qtestock = ref(0);
 
 
-function chargeProduits() {
-     // Appel à l'API pour avoir la liste des catégories
-    // Trié par code, descendant
-    // Verbe HTTP GET par défaut
-    doAjaxRequest(BACKEND + "/api/produits?page=0&size=5")
-        .then((json) => {
-            data.listeProduits = json._embedded.produits;
-            data.links = json._links;
-            console.log(data.links);
-            console.log(data.links.next.href);
-            console.log(data.listeProduits);
-        })
-        .catch((error) => alert(error.message));
-}
+const emit = defineEmits(["addCajout"]);
 
-function StartProduits(url) {
-     // Appel à l'API pour avoir la liste des catégories
-    // Trié par code, descendant
-    // Verbe HTTP GET par défaut
-    console.log("La page en question",url);
-    doAjaxRequest(url)
-        .then((json) => {
-            data.listeProduits = json._embedded.produits;
-            data.links = json._links;
-            console.log(data.listeProduits);
-            console.log(data.links);
-        })
-        .catch((error) => alert(error.message));
-}
-
-
-
-
-
-/**
- * Supprime une entité
- * @param entityRef l'URI de l'entité à supprimer
- */
-
-
-// A l'affichage du composant, on affiche la liste
-onMounted(chargeProduits);
+// -- donnée réactive pour la saisie du titre,prix et quantite du livre;
 
 
 
 </script>
 
+<template>
+    <div>
+        
+		<div class="wrapper" >
+			<div class="inner">
+				<form @submit.prevent="$emit('addCajout', titre,prix,qtestock)" >
+					<h3>Ajouter un Livre</h3>
+					<div class="form-group">
+						<div class="form-wrapper">
+							<label for="">Titre du Livre</label>
+							<input  v-model="titre" placeholder="titre" type="text" class="form-control">
+						</div>
+						<div class="form-wrapper">
+							<label for="">Prix</label>
+							<input id="prix"  v-model="prix" type="text" class="form-control">
+						</div>
+					</div>
+					<div class="form-wrapper">
+						<label for="">Quantité en stock</label>
+						<input id="qtestock"  v-model="qtestock" type="number" class="form-control">
+					</div>
+					<button>Ajouter livre</button>
+				</form>
+			</div>
+		</div>
+    </div>
+
+</template>
 
 <style scoped>
 
-.styled-table {
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    font-family: sans-serif;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-}
 
-td,
-th {
-    border: 1px solid #ddd;
-    padding: 8px;
+
+input, textarea, select, button {
+  font-family: "Poppins", sans-serif;
+  color: #333;
+  font-size: 13px; 
 }
 
 
-.styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+.wrapper {
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center; 
+  margin-left:10px;
+  margin-top: 280px;
+  margin-bottom: 100px;
+
 }
 
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+.inner {
+  min-width: 850px;
+  margin: auto;
+  padding-top: 68px;
+  padding-bottom: 48px;
+
 }
 
-.styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
+  .inner h3 {
+    text-transform: uppercase;
+    font-size: 22px;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    margin-bottom: 32px;
+    color: #333;
+    letter-spacing: 2px; }
+
+form {
+  width: 50%;
+  padding-left: 45px; }
+
+.form-group {
+  display: flex; }
+  .form-group .form-wrapper {
+    width: 50%; }
+    .form-group .form-wrapper:first-child {
+      margin-right: 20px; }
+
+.form-wrapper {
+  margin-bottom: 17px; }
+  .form-wrapper label {
+    margin-bottom: 9px;
+    display: block; }
+
+.form-control {
+  border: 1px solid #ccc;
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 20px;
+  font-family: "Muli-Bold";
+  background: none; }
+  .form-control:focus {
+    border: 1px solid linear-gradient(132deg, rgb(0, 103, 154) 0.00%, rgb(0, 173, 239) 100.00%); }
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-left: 20px; }
+  select option[value=""][disabled] {
+    display: none; }
+
+button {
+  border: none;
+  width: 152px;
+  height: 40px;
+  margin: auto;
+  margin-top: 29px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: #ae3c33;
+  font-size: 13px;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: "Muli-SemiBold";
+  border-radius: 20px;
+  overflow: hidden;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  position: relative;
+  -webkit-transition-property: color;
+  transition-property: color;
+  -webkit-transition-duration: 0.5s;
+  transition-duration: 0.5s; }
+  
+  button:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #f11a09;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transform-origin: 0 50%;
+    transform-origin: 0 50%;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out; 
 }
 
+  button:hover:before {
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+    -webkit-transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+    transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66); }
 
-th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #232623;
-    color: rgb(255, 255, 255);
-}
+  .inner {
+    min-width: 768px; } 
+  .inner {
+    min-width: auto;
+    background: none;
+    padding-top: 0;
+    padding-bottom: 0; }
 
-.fa-arrow-circle-right {
-    font-size:48px;
-    color:red;
-}
+  form {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px; 
+} 
+
 </style>

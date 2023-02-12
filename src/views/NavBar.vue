@@ -1,7 +1,9 @@
 <script setup>
-
+import { ref } from "vue";
+// -- donnée réactive pour la l'affichage de la page ajout
+const showajout = ref("");
 //les évenement émits par la composant
-const emit = defineEmits(["show",'voir']);
+const emit = defineEmits(["showform"]);
 
 </script>
 
@@ -10,23 +12,13 @@ const emit = defineEmits(["show",'voir']);
 <div class="wrapper">
   <div class="sidebar">
       <ul>
-        <li><a href="#" class="active">
-          <span class="icon"><i class="fas fa-blog"></i></span>
-          <span class="title">Mes Livre </span>
-          </a></li>
-
-          <li><a>
-            <span @click="$emit('show')"  class="title">Ajouter un Livre </span>
-          </a></li>
-
-          <li><a href="#">
-          <RouterLink to="/about" class="title">Modifier un livre</RouterLink>
-          </a></li>
-
-          <li><a href="#">
-          <RouterLink to="/about" class="title">Supprimer un livre</RouterLink>
-          </a></li>
-
+        <li>
+        <button  type="button" class="btn">Mes Livre </button>
+        </li>
+        <br/>
+        <button @click = "" type="button" class="btn">Ajouter un Livre </button>
+          <br/>
+        <button type="button" class="btn">Supprimer un Livre </button>
       </ul>
   </div>
 </div>
@@ -36,6 +28,7 @@ const emit = defineEmits(["show",'voir']);
 
 
 *{
+  position: relative;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -44,94 +37,49 @@ const emit = defineEmits(["show",'voir']);
   font-family: 'Montserrat', sans-serif;
 }
 
-body{
-  background: #e1ecf2;
-}
+
 
 .wrapper{
   margin-top: -200px;
   margin-left: -200px;
   margin-top:-600px;
-
-
 }
 
 
 .wrapper .sidebar{
-  top: 70px;
   left: 10px;
-  background: linear-gradient(132deg, rgb(0, 103, 154) 0.00%, rgb(0, 173, 239) 100.00%);
   width: 200px;
-  height: calc(100% - 80px);
   border-bottom-left-radius: 20px;
-  transition: all 0.3s ease;
-  margin-top: 10px;
+  margin-top: 150px;
 }
 
-.wrapper .sidebar ul li a{
-    display: block;
-    padding: 20px;
-    color: #fff;
-    position: relative;
-    margin-bottom: 1px;
-    color: white;
-    white-space: nowrap;
-    
-}
 
-.wrapper .sidebar ul li a:before{
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: #92a6e2;
-  display: none;
-}
-
-.wrapper .sidebar ul li a span.icon{
-  margin-right: 10px;
-  display: inline-block;
-}
-
-.wrapper .sidebar ul li a span.title{
-  display: inline-block;
-}
-
-.wrapper .sidebar ul li a:hover,
-.wrapper .sidebar ul li a.active{
-background: linear-gradient(132deg, rgb(227, 244, 253) 0.00%, rgb(170, 209, 226) 100.00%);
-  color: black;
-}
-
-.wrapper .sidebar ul li a:hover:before,
-.wrapper .sidebar ul li a.active:before{
+.btn{
+  background: linear-gradient(132deg, rgb(0, 103, 154) 0.00%, rgb(0, 173, 239) 100.00%);
+  color: #fff;
+  margin: 30px 0;
+  border-radius: 30px;
+  transition: 0.5s;
   display: block;
+  padding:11px;
+  position: relative;
+  margin-bottom: 1px;
+  white-space: nowrap;
+}
+
+.btn:hover {
+    background: linear-gradient(132deg, rgb(227, 244, 253) 0.00%, rgb(170, 209, 226) 100.00%);
 }
 
 
 
-.wrapper.collapse .sidebar{
-  width: 70px;
-}
 
-.wrapper.collapse .sidebar ul li a{
-  text-align: center; 
-}
 
-.wrapper.collapse .sidebar ul li a span.icon{
-  margin: 0;
-}
 
-.wrapper.collapse .sidebar ul li a span.title{
-  display: none;
-}
 
-.wrapper.collapse .main_container{
-  width: (100% - 70px);
-  margin-left: 70px;
-}
+
+
+
 
 
 </style>
