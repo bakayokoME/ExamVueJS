@@ -3,16 +3,22 @@
 import { reactive, onMounted } from "vue";
 import { BACKEND, doAjaxRequest } from "../api";
 import { RouterLink, RouterView } from 'vue-router'
+import { ref } from "vue";
+
 
 import NavBar from "./NavBar.vue";
-import BookForm from "./BookForm.vue"
+import BookForm from "./BookForm.vue";
 // Pour réinitialiser le formuaire
 
+let livreajouter = false;
 let data = reactive({
     // Les données saisies dans le formulaire
     // La liste des catégories affichée sous forme de table
     listeLivres: []
 });
+
+const motcle = ref("");
+
 
 function chargeLivres() {
     // Appel à l'API pour avoir la liste des catégories
@@ -38,7 +44,43 @@ function ajouteLivre(titre,prix,qtestock) {
     headers: myHeaders,
     body: JSON.stringify({titre: titre, prix: prix, qtestock : qtestock }),
   };
-  fetch(BACKEND, fetchOptions)
+  fetch(BACKEND , fetchOptions)
+    .then((response) => {
+      return response.json();
+    })
+    .then((dataJSON) => {
+      // livreajouter = true;
+      chargeLivres();
+    })
+    .catch((error) => console.log(error));
+}
+
+
+function recherLivre(motcle) {
+  console.log("le mot : ",motcle);
+  doAjaxRequest(BACKEND + `?search=${motcle}`)
+        .then((json) => {
+          console.log("je n'es rien trouver !");
+          data.listeLivres = json;
+          console.log(data.listeLivres);
+            chargeLivres();
+        })
+        .catch((error) => alert(error.message));
+}
+
+
+/**
+ * Supprime une entité
+ * @param id l'URI de l'entité à supprimer
+ */
+function deleteLivre(id) {
+  console.log(id);
+  const fetchOptions = {
+    method: "DELETE",
+  };
+  // -- l'id de la chose à supprimer doit être
+  //  ajouté à la fin de l'url
+  fetch(BACKEND + "/" + id, fetchOptions)
     .then((response) => {
       return response.json();
     })
@@ -49,20 +91,10 @@ function ajouteLivre(titre,prix,qtestock) {
     .catch((error) => console.log(error));
 }
 
+function modifierLivreajout(id) {
+  ajouteLivre(titre,prix,qtestock)
+}
 
-
-
-
-
-// /**
-//  * Supprime une entité
-//  * @param entityRef l'URI de l'entité à supprimer
-//  */
-// function deleteEntity(entityRef) {
-//     doAjaxRequest(entityRef, { method: "DELETE" })
-//         .then(chargeCategories)
-//         .catch((error) => alert(error.message));
-// }
 
 // A l'affichage du composant, on affiche la liste
 onMounted(chargeLivres);
@@ -123,8 +155,8 @@ onMounted(chargeLivres);
     <!----------------featured categories -------------------->
 
     <!----------------featured Books -------------------->   
-    <button type="button" title = "buttonr" class="btnsearch" >Rechercher</button>
-   <input type="search" name="" id="input" class="form-control" value="" required="required" title=""> 
+      <button @click="recherLivre(motcle.value)" type="button" title = "button" class="btnsearch" >Rechercher</button>
+      <input type="text" ref="motcle" id="inputrech" class="form-control" value="" required="required" >     
      <div class="small-container">
         <h2 class="title">Mes Livres </h2>
         <div  id="slider" class="row">
@@ -132,16 +164,20 @@ onMounted(chargeLivres);
                   <div class="slide">
                     <img src="../assets/images/Book 4.jpg" alt="Book 4"/>               
                     <h3 class="labelone">Prix : {{ livre.prix }} €</h3>
-                    <span class="labeltw" > Titre : {{ livre.titre }} </span>  
-                    <span class="labeltr" > Qte en Stock : {{ livre.qtestock }} </span>  
+                    <span class="labeltw" > Titre : {{ livre.titre }} </span><br>  
+                    <span class="labeltr"> Qte en Stock : {{ livre.qtestock }} </span>  
+                    <button class="btnsupprimer" @click="deleteLivre(livre.id)">Supprimer</button>
+                    <button class="btnup" @click="modifierLivreajout(livre.id)">+</button>
+                    <button class="btndown" @click="modifierLivresupprimer(livre.id)">-</button>
                   </div>
               </div> 
-
+              
          </div>
-         <NavBar></NavBar>
-
+            <h3 id= "succestrue" class="success" v-if="livreajouter"  >Livre Ajouter !!!</h3>
+         <NavBar @listerlivres="chargeLivres" ></NavBar>
         </div>
      <BookForm @addCajout="ajouteLivre" ></BookForm>
+     
 </main>
 </template>
 
@@ -158,6 +194,15 @@ main{
   margin-top: 12px;
   margin-left: 75px;
 }
+.success{
+  padding: 2em;
+  background-color: #CBDEDD;
+  display: block;
+  color: black;
+  margin-top: 23px;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px
+}
 
 
 .form-control{
@@ -165,6 +210,35 @@ main{
   margin-left: 390px;
   margin-top: 45px;
 }
+
+.btnsupprimer{
+  display: inline-block;
+  background: #ff523b;
+  color: #fff;
+  padding: 8px 30px;
+  margin: 30px 0;
+  border-radius: 30px;
+  transition: 0.5s;
+  margin-left: 50px;
+}
+
+.btnup {
+  width:30px;
+  margin-left: 12px;
+  border-radius: 20px;
+
+}
+
+.btndown{
+  position:absolute;
+  width:30px;
+  margin-top: 38px;
+  margin-left:12px; 
+  border-radius: 20px;
+}
+
+
+
 
 .btnsearch{
   position:absolute;
@@ -184,6 +258,7 @@ main{
   margin-left: 12px;
   display: flex;
   overflow-x: auto;
+  text-align: center;
 }
 
 

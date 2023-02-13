@@ -4,7 +4,6 @@ import { ref } from "vue";
 import { reactive, onMounted } from "vue";
 import { BACKEND, doAjaxRequest } from "../api";
 
-
 const titre = ref("");
 const prix = ref("");
 const qtestock = ref(0);
@@ -37,7 +36,7 @@ const emit = defineEmits(["addCajout"]);
 					</div>
 					<div class="form-wrapper">
 						<label for="">Quantité en stock</label>
-						<input id="qtestock"  v-model="qtestock" type="number" class="form-control">
+						<input id="qtestock"  v-model="qtestock" type="number" min="0" class="form-control">
 					</div>
 					<button>Ajouter livre</button>
 				</form>
@@ -59,12 +58,13 @@ input, textarea, select, button {
 
 
 .wrapper {
+  position: static;
   background-size: cover;
   background-repeat: no-repeat;
   display: flex;
   align-items: center; 
-  margin-left:10px;
-  margin-top: 280px;
+  margin-right: 50px;
+  margin-top: 410px;
   margin-bottom: 100px;
 
 }
@@ -115,13 +115,6 @@ form {
   .form-control:focus {
     border: 1px solid linear-gradient(132deg, rgb(0, 103, 154) 0.00%, rgb(0, 173, 239) 100.00%); }
 
-select {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  padding-left: 20px; }
-  select option[value=""][disabled] {
-    display: none; }
 
 button {
   border: none;
@@ -134,11 +127,11 @@ button {
   align-items: center;
   justify-content: center;
   padding: 0;
-  background: #ae3c33;
+  background: #ff523b;
   font-size: 13px;
   color: #fff;
   text-transform: uppercase;
-  font-family: "Muli-SemiBold";
+  font-family: "Poppins";
   border-radius: 20px;
   overflow: hidden;
   -webkit-transform: perspective(1px) translateZ(0);
@@ -148,7 +141,8 @@ button {
   -webkit-transition-property: color;
   transition-property: color;
   -webkit-transition-duration: 0.5s;
-  transition-duration: 0.5s; }
+  transition-duration: 0.5s;
+ }
   
   button:before {
     content: "";
@@ -175,7 +169,8 @@ button {
     -webkit-transform: scaleX(1);
     transform: scaleX(1);
     -webkit-transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
-    transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66); }
+    transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+   }
 
   .inner {
     min-width: 768px; } 

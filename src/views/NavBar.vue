@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from "vue";
+
 // -- donnée réactive pour la l'affichage de la page ajout
 const showajout = ref("");
 //les évenement émits par la composant
-const emit = defineEmits(["showform"]);
+const emit = defineEmits(["listerlivres"]);
 
 </script>
 
@@ -13,12 +14,10 @@ const emit = defineEmits(["showform"]);
   <div class="sidebar">
       <ul>
         <li>
-        <button  type="button" class="btn">Mes Livre </button>
+        <button  @click="$emit('listerlivres')" type="button" class="btn">Mes Livre </button>
         </li>
         <br/>
-        <button @click = "" type="button" class="btn">Ajouter un Livre </button>
-          <br/>
-        <button type="button" class="btn">Supprimer un Livre </button>
+       
       </ul>
   </div>
 </div>

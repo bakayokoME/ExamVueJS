@@ -69,6 +69,8 @@ function chargeCategories() {
         .catch((error) => alert(error.message));
 }
 
+
+
 function ajouteCategorie() {
     // Ajouter une catégorie avec les données du formulaire
     const options = {
