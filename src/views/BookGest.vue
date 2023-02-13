@@ -91,8 +91,64 @@ function deleteLivre(id) {
     .catch((error) => console.log(error));
 }
 
-function modifierLivreajout(id) {
-  ajouteLivre(titre,prix,qtestock)
+function modifierLivreajout(livre) {
+    // -- faire la chose
+  // -- entête http pour la req AJAX
+  console.log("la nouvel qtite",livre.qtestock);
+  livre.qtestock +=1;
+  console.log("la nouvel qtite",livre.qtestock);
+  let myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  // -- la chose modifiée est envoyé au serveur
+  //  via le body de la req AJAX
+  const fetchOptions = {
+    method: "PUT",
+    headers: myHeaders,
+    body: JSON.stringify(livre),
+  };
+  // -- la req AJAX
+  fetch(BACKEND, fetchOptions)
+    .then((response) => {
+      return response.json();
+    })
+    .then((dataJSON) => {
+      console.log(dataJSON);
+      // actualiser la liste des choses
+      chargeLivres();
+    })
+    .catch((error) => console.log(error));
+}
+
+function modifierLivresupprimer(livre) {
+    // -- faire la chose
+  // -- entête http pour la req AJAX
+  console.log("la nouvel qtite",livre.qtestock);
+  livre.qtestock -= 1;
+  console.log("la nouvel qtite",livre.qtestock);
+  let myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  // -- la chose modifiée est envoyé au serveur
+  //  via le body de la req AJAX
+  const fetchOptions = {
+    method: "PUT",
+    headers: myHeaders,
+    body: JSON.stringify(livre),
+  };
+  // -- la req AJAX
+  fetch(BACKEND, fetchOptions)
+    .then((response) => {
+      return response.json();
+    })
+    .then((dataJSON) => {
+      console.log("essayon ici",livre.qtestock);
+      if (livre.qtestock == 0 ) {
+        deleteLivre(livre.id);
+        console.log("Suppression reussie !");
+      }
+      // actualiser la liste des choses
+      chargeLivres();
+    })
+    .catch((error) => console.log(error));
 }
 
 
@@ -167,8 +223,8 @@ onMounted(chargeLivres);
                     <span class="labeltw" > Titre : {{ livre.titre }} </span><br>  
                     <span class="labeltr"> Qte en Stock : {{ livre.qtestock }} </span>  
                     <button class="btnsupprimer" @click="deleteLivre(livre.id)">Supprimer</button>
-                    <button class="btnup" @click="modifierLivreajout(livre.id)">+</button>
-                    <button class="btndown" @click="modifierLivresupprimer(livre.id)">-</button>
+                    <button class="btnup" @click="modifierLivreajout(livre)">+</button>
+                    <button class="btndown" @click="modifierLivresupprimer(livre)">-</button>
                   </div>
               </div> 
               
