@@ -56,14 +56,11 @@ function ajouteLivre(titre,prix,qtestock) {
 }
 
 
-function recherLivre(motcle) {
+function rechercherLivre(motcle) {
   console.log("le mot : ",motcle);
   doAjaxRequest(BACKEND + `?search=${motcle}`)
         .then((json) => {
-          console.log("je n'es rien trouver !");
           data.listeLivres = json;
-          console.log(data.listeLivres);
-            chargeLivres();
         })
         .catch((error) => alert(error.message));
 }
@@ -211,7 +208,7 @@ onMounted(chargeLivres);
     <!----------------featured categories -------------------->
 
     <!----------------featured Books -------------------->   
-      <button @click="recherLivre(motcle.value)" type="button" title = "button" class="btnsearch" >Rechercher</button>
+      <button @click="rechercherLivre(motcle.value)" type="button" title = "button" class="btnsearch" >Rechercher</button>
       <input type="text" ref="motcle" id="inputrech" class="form-control" value="" required="required" >     
      <div class="small-container">
         <h2 class="title">Mes Livres </h2>
