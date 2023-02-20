@@ -1,13 +1,10 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import AboutView from './views/AboutView.vue';
-import BookHeader from './views/BookHeader.vue';
 import BookGest from './views/BookGest.vue';
-import NavBar from './views/NavBar.vue';
 </script>
 
 <template>
-
+//
 <BookGest></BookGest>
 
 </template>

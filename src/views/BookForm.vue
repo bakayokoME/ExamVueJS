@@ -117,7 +117,7 @@ form {
 
 
 button {
-  border: none;
+  border-radius: 30px;
   width: 152px;
   height: 40px;
   margin: auto;

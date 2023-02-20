@@ -8,12 +8,12 @@ import { ref } from "vue";
 
 import NavBar from "./NavBar.vue";
 import BookForm from "./BookForm.vue";
-// Pour réinitialiser le formuaire
+// Pour réinitialiser le formuaire de livre
 
 let livreajouter = false;
 let data = reactive({
     // Les données saisies dans le formulaire
-    // La liste des catégories affichée sous forme de table
+    // La liste des livres affichée sous forme de table
     listeLivres: []
 });
 
@@ -21,7 +21,7 @@ const motcle = ref("");
 
 
 function chargeLivres() {
-    // Appel à l'API pour avoir la liste des catégories
+    // Appel à l'API pour avoir la liste des listes
     // Trié par code, descendant
     // Verbe HTTP GET par défaut
     doAjaxRequest(BACKEND)
@@ -37,7 +37,6 @@ function ajouteLivre(titre,prix,qtestock) {
   console.log(titre);
   let myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-  // --  le libelle de la nouvelle chose est envoyé au serveur
   //  via le body de la req AJAX
   const fetchOptions = {
     method: "POST",
@@ -57,6 +56,7 @@ function ajouteLivre(titre,prix,qtestock) {
 
 
 function rechercherLivre(motcle) {
+  //je passe le mot à trouver
   console.log("le mot : ",motcle);
   doAjaxRequest(BACKEND + `?search=${motcle}`)
         .then((json) => {
@@ -75,7 +75,7 @@ function deleteLivre(id) {
   const fetchOptions = {
     method: "DELETE",
   };
-  // -- l'id de la chose à supprimer doit être
+  // -- l'id du livre à supprimer doit être
   //  ajouté à la fin de l'url
   fetch(BACKEND + "/" + id, fetchOptions)
     .then((response) => {
@@ -89,14 +89,15 @@ function deleteLivre(id) {
 }
 
 function modifierLivreajout(livre) {
-    // -- faire la chose
+  // modifier le  modifier uniquement le stock 
+  // rajouter 1 
   // -- entête http pour la req AJAX
   console.log("la nouvel qtite",livre.qtestock);
   livre.qtestock +=1;
   console.log("la nouvel qtite",livre.qtestock);
   let myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-  // -- la chose modifiée est envoyé au serveur
+  // -- le livre modifiée est envoyé au serveur
   //  via le body de la req AJAX
   const fetchOptions = {
     method: "PUT",
@@ -110,21 +111,21 @@ function modifierLivreajout(livre) {
     })
     .then((dataJSON) => {
       console.log(dataJSON);
-      // actualiser la liste des choses
+      // actualiser la liste des livres
       chargeLivres();
     })
     .catch((error) => console.log(error));
 }
 
 function modifierLivresupprimer(livre) {
-    // -- faire la chose
-  // -- entête http pour la req AJAX
+    // modifier le   uniquement le stock 
+  // enlever  1
   console.log("la nouvel qtite",livre.qtestock);
   livre.qtestock -= 1;
   console.log("la nouvel qtite",livre.qtestock);
   let myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-  // -- la chose modifiée est envoyé au serveur
+  // -- le livre modifiée est envoyé au serveur
   //  via le body de la req AJAX
   const fetchOptions = {
     method: "PUT",
@@ -138,6 +139,7 @@ function modifierLivresupprimer(livre) {
     })
     .then((dataJSON) => {
       console.log("essayon ici",livre.qtestock);
+      //si la quantité en stock est égale à zeros il y a suppression du livre
       if (livre.qtestock == 0 ) {
         deleteLivre(livre.id);
         console.log("Suppression reussie !");
@@ -242,6 +244,13 @@ main{
     width: 100em;
 }
 
+.form-control{
+  border-radius: 30px;
+  width: 90px;
+  height: 50px;
+  box-sizing: border-box;
+
+}
 
 .labelone{
   margin-top: 12px;
@@ -273,21 +282,20 @@ main{
   border-radius: 30px;
   transition: 0.5s;
   margin-left: 50px;
+  cursor:pointer;
 }
 
 .btnup {
-  width:30px;
-  margin-left: 12px;
-  border-radius: 20px;
+  width:20px;
+  cursor:pointer;
+  margin-left: 2px;
 
 }
 
 .btndown{
-  position:absolute;
-  width:30px;
-  margin-top: 38px;
-  margin-left:12px; 
-  border-radius: 20px;
+  width:20px;
+  cursor:pointer;
+  margin-left: 3px;
 }
 
 
@@ -299,12 +307,13 @@ main{
   background: #ff523b;
   color: #fff;
   padding: 8px 30px;
-  margin: 30px 0;
+  margin: 30px 2px;
   border-radius: 30px;
   transition: 0.5s;
   margin-left: 920px;
-
+  cursor:pointer;
 }
+
 #slider{
   width: 1000px;
   height: 500px;
@@ -463,6 +472,8 @@ p {
   position: relative;
   line-height: 60px;
   color: #555;
+  cursor:pointer;
+
 }
 .title::after {
   content: "";
