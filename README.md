@@ -1,6 +1,7 @@
-# comptoirs-frontend fait par JB & Ezechiel
+# Examen Vue Js 
 
-Exemple de frontend sur l'API "comptoirs".
+  ISIS FIE3 - Technologies du Web - le langage Javascript – API & AJAX <br />
+ Mini-projet 2022-2023
 
 ## Eléments rajoutés :
 ### [View router](https://router.vuejs.org/)   
@@ -9,7 +10,7 @@ Voir [App.vue](./src/App.vue), [Configuration du routeur](./src/router/index.js)
 
 [View router](https://router.vuejs.org/)
 
-[Le composant qui affiche les catégories](./src/views/CategorieView.vue)
+[Le composant qui affiche les livres](./src/views/BookGest.vue)
 
 
 ## Project Setup
